@@ -1,0 +1,38 @@
+# A. O(2n)
+
+print("A. O(2n)")
+# Fungsi dengan kompleksitas O(2n)
+def mybook(n):
+    number = 1 # Mencetak nomor halaman
+
+    # Iterasi pertama: mencetak n halaman utama.
+    for i in range(n):
+        print(f"{number} Cetak Halaman ke {i}")
+        number += 1 # Increment untuk melacak halaman berikutnya.
+
+    # Iterasi kedua: mencetak n halaman cadangan (backup).
+    for a in range(n):
+        print(f"{number} Cetak Backup Halaman ke {a}")
+        number += 1
+
+mybook(6) # Misalnya n=6
+# B. O(n + n²)
+print("B. O(n + n²)")
+# Fungsi dengan kompleksitas O(n + n²)
+def mybook(n):
+    number = 1
+
+    # Iterasi pertama O(n^2): loop bersarang(nested loops) 
+    # Loop luar (untuk setiap buku)
+    for book in range(n):
+        # Loop dalam (untuk setiap halaman buku)
+        for halaman in range(n):
+            print(f'{number} Cetak buku ke {book} halaman ke {halaman}')
+            number += 1
+    
+    # Iterasi kedua O(n): mencetak n kali halaman cadangan (backup) 
+    for i in range(n):
+        print(f'{number} Cetak Backup Halaman ke {i}')
+        number += 1
+mybook(4)  # Misalnya n=4
+
