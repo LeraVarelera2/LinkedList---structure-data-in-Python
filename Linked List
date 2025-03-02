@@ -1,0 +1,146 @@
+# Kelas Node untuk merepresentasikan setiap node pada Double Linked List
+class Node:
+    def __init__(self, nim, nama):
+        self.nim = nim  # Menyimpan NIM mahasiswa
+        self.nama = nama  # Menyimpan Nama mahasiswa
+        self.next = None  # Pointer ke node berikutnya
+        self.prev = None  # Pointer ke node sebelumnya
+
+
+# Kelas Double Linked List yang berisi operasi-operasi pada list
+class DoubleLinkedList:
+    def __init__(self):
+        self.head = None  # Head akan menunjuk ke node pertama
+        self.tail = None  # Tail akan menunjuk ke node terakhir
+        self.length = 0  # Panjang list untuk keperluan tracking
+
+    # Fungsi untuk menambahkan node di akhir list (Append)
+    def append(self, nim, nama):
+        new_node = Node(nim, nama)  # Membuat node baru dengan NIM dan Nama
+        if self.length == 0:  # Jika list kosong
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next = new_node  # Menunjuk node berikutnya
+            new_node.prev = self.tail  # Menunjuk node sebelumnya
+            self.tail = new_node  # Meng-update tail dengan node baru
+        self.length += 1  # Menambah panjang list
+
+    # Fungsi untuk menghapus node terakhir (Pop)
+    def pop(self):
+        if self.length == 0:  # Jika list kosong
+            return None
+        temp = self.tail  # Simpan node yang akan dihapus
+        if self.length == 1:  # Jika hanya ada satu node
+            self.head = None
+            self.tail = None
+        else:
+            self.tail = self.tail.prev  # Update tail menjadi node sebelumnya
+            self.tail.next = None
+        self.length -= 1  # Kurangi panjang list
+        return temp.nim, temp.nama  # Mengembalikan NIM dan Nama yang dihapus
+
+    # Fungsi untuk menambahkan node di awal list (Prepend)
+    def prepend(self, nim, nama):
+        new_node = Node(nim, nama)  # Membuat node baru
+        if self.length == 0:  # Jika list kosong
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.next = self.head  # Node baru menunjuk ke node pertama
+            self.head.prev = new_node  # Node pertama menunjuk ke node baru
+            self.head = new_node  # Meng-update head
+        self.length += 1  # Tambah panjang list
+
+    # Fungsi untuk menambahkan node di posisi tertentu (Insert)
+    def insert(self, index, nim, nama):
+        if index < 0 or index > self.length:  # Validasi index
+            return False
+        if index == 0:  # Jika index 0, gunakan prepend
+            return self.prepend(nim, nama)
+        if index == self.length:  # Jika index sama dengan panjang list, gunakan append
+            return self.append(nim, nama)
+        
+        new_node = Node(nim, nama)  # Membuat node baru
+        temp = self.head
+        for _ in range(index - 1):  # Pindahkan pointer ke posisi yang diinginkan
+            temp = temp.next
+        new_node.next = temp.next
+        new_node.prev = temp
+        temp.next.prev = new_node
+        temp.next = new_node
+        self.length += 1
+        return True
+
+    # Fungsi untuk menghapus node di posisi tertentu (Remove)
+    def remove(self, index):
+        if index < 0 or index >= self.length:  # Validasi index
+            return None
+        if index == 0:  # Jika index 0, hapus head
+            removed_node = self.head
+            self.head = self.head.next
+            if self.head:
+                self.head.prev = None
+            self.length -= 1
+            return removed_node.nim, removed_node.nama
+        if index == self.length - 1:  # Jika index adalah tail, gunakan pop
+            return self.pop()
+
+        temp = self.head
+        for _ in range(index):  # Pindahkan pointer ke posisi yang diinginkan
+            temp = temp.next
+        temp.prev.next = temp.next
+        temp.next.prev = temp.prev
+        self.length -= 1
+        return temp.nim, temp.nama
+
+    # Fungsi untuk mencetak seluruh isi list
+    def print_list(self):
+        temp = self.head
+        while temp:  # Iterasi sepanjang list dan cetak NIM dan Nama
+            print(f"NIM: {temp.nim}, Nama: {temp.nama}")
+            temp = temp.next
+        print("None")  # Menandakan akhir list
+
+
+# Contoh penggunaan Double Linked List
+absen = DoubleLinkedList()
+
+# Menambahkan mahasiswa dengan fungsi append
+absen.append("2201", "Billgates")
+absen.append("2202", "Lorem Ipsum")
+absen.append("2203", "Elon Musk")
+absen.append("2405","Senku-Dr Stone")
+
+# Menampilkan list setelah append
+print("Setelah Append:")
+absen.print_list()
+
+# Menghapus mahasiswa terakhir menggunakan pop
+absen.pop()
+
+# Menampilkan list setelah pop
+print("\nSetelah Pop:")
+absen.print_list()
+
+# Menggunakan prepend untuk menambahkan di awal
+absen.prepend("2200", "Luffy")
+
+# Menampilkan list setelah prepend
+print("\nSetelah Prepend:")
+absen.print_list()
+
+# Menyisipkan mahasiswa di posisi tertentu menggunakan insert
+absen.insert(2, "2205", "Gojo Satoru")
+
+# Menampilkan list setelah insert
+print("\nSetelah Insert:")
+absen.print_list()
+
+# Menghapus mahasiswa di posisi tertentu menggunakan remove
+absen.remove(1)
+
+# Menampilkan list setelah remove
+print("\nSetelah Remove:")
+absen.print_list()
+
